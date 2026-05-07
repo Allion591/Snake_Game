@@ -1,11 +1,19 @@
 package main.java.ru.game.snake;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Snake {
     private List<SnakeSection> sections;
     private boolean isAlive;
     private SnakeDirection direction;
+
+    public Snake(int x, int y) {
+        sections = new ArrayList<>();
+        SnakeSection head = new SnakeSection(x, y);
+        sections.add(head);
+        isAlive = true;
+    }
 
     public void setDirection(SnakeDirection direction) {
         this.direction = direction;
@@ -21,5 +29,17 @@ public class Snake {
 
     public SnakeDirection getDirection() {
         return direction;
+    }
+
+    public int getX() {
+        return sections.get(0).getX();
+    }
+
+    public int getY() {
+        return sections.get(0).getY();
+    }
+
+    public void move() {
+
     }
 }
