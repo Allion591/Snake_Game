@@ -53,10 +53,13 @@ public class Room {
         Snake snake1 = new Snake(0, 0);
         game = new Room(600, 800, snake1);
         snake1.setDirection(SnakeDirection.DOWN);
+        game.createMouse();
+        game.run();
     }
 
     public void run() {}
     public void print() {}
+    public void sleep() {}
 
     public void createMouse() {
         int x = (int) (Math.random() * width);
