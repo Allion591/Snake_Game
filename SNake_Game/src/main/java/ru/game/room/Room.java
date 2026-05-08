@@ -2,8 +2,10 @@ package main.java.ru.game.room;
 
 import main.java.ru.game.mouse.Mouse;
 import main.java.ru.game.snake.Snake;
+import main.java.ru.game.snake.SnakeDirection;
 
 public class Room {
+    public static Room game;
     private int width;
     private int height;
     private Snake snake;
@@ -48,6 +50,11 @@ public class Room {
     }
 
     public static void main(String[] args) {
-
+        Snake snake1 = new Snake(0, 0);
+        game = new Room(600, 800, snake1);
+        snake1.setDirection(SnakeDirection.DOWN);
     }
+
+    public void run() {}
+    public void print() {}
 }
