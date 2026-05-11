@@ -4,63 +4,62 @@ import main.java.ru.game.keyboard.KeyboardObserver;
 import main.java.ru.game.mouse.Mouse;
 import main.java.ru.game.snake.Snake;
 import main.java.ru.game.snake.SnakeDirection;
+import main.java.ru.game.snake.SnakeSection;
 
 import java.awt.event.KeyEvent;
 
 public class Room {
-    public static Room game;
     private int width;
     private int height;
     private Snake snake;
     private Mouse mouse;
 
+    public static Room game;
+
     public Room(int width, int height, Snake snake) {
         this.width = width;
         this.height = height;
         this.snake = snake;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+        game = this;
     }
 
     public Snake getSnake() {
         return snake;
     }
 
-    public void setSnake(Snake snake) {
-        this.snake = snake;
-    }
-
     public Mouse getMouse() {
         return mouse;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setSnake(Snake snake) {
+        this.snake = snake;
     }
 
     public void setMouse(Mouse mouse) {
         this.mouse = mouse;
     }
 
-    public static void main(String[] args) {
-        game = new Room(20, 20, new Snake(10, 10));
-        game.snake.setDirection(SnakeDirection.DOWN);
-        game.createMouse();
-        game.run();
-    }
-
+    /**
+     * Основной цикл программы.
+     * Тут происходят все важные действия
+     */
     public void run() {
-
         //Создаем объект "наблюдатель за клавиатурой" и стартуем его.
         KeyboardObserver keyboardObserver = new KeyboardObserver();
         keyboardObserver.start();
@@ -94,7 +93,52 @@ public class Room {
 
         System.out.println("Game Over!");
     }
-    public void print() {}
+
+    public void print() {
+        int[][] matrix = new int[height][width];
+        matrix[snake.getY()][snake.getX()] = 2;
+
+        for (int i = 1; i < snake.getSections().size(); i++) {
+            SnakeSection section = snake.getSections().get(i);
+            matrix[section.getY()][section.getX()] = 1;
+        }
+
+        matrix[mouse.getY()][mouse.getX()] = 3;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 2) {
+                    System.out.print('X');
+                } else if (matrix[i][j] == 1) {
+                    System.out.print('x');
+                } else if (matrix[i][j] == 3) {
+                    System.out.print('^');
+                } else {
+                    System.out.print('.');
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void eatMouse() {
+        createMouse();
+    }
+
+    public void createMouse() {
+        int x = (int) (Math.random() * width);
+        int y = (int) (Math.random() * height);
+
+        mouse = new Mouse(x, y);
+    }
+
+    public static void main(String[] args) {
+        game = new Room(20, 20, new Snake(10, 10));
+        game.snake.setDirection(SnakeDirection.DOWN);
+        game.createMouse();
+        game.run();
+    }
+
     public void sleep() {
         try {
             int level = snake.getSections().size();
@@ -108,15 +152,5 @@ public class Room {
         } catch (InterruptedException e) {
             System.out.println("Ошибка " + e.getMessage());
         }
-    }
-
-    public void createMouse() {
-        int x = (int) (Math.random() * width);
-        int y = (int) (Math.random() * height);
-        mouse = new Mouse(x, y);
-    }
-
-    public void eatMouse() {
-        createMouse();
     }
 }
