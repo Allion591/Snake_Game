@@ -1,5 +1,6 @@
 package main.java.ru.game.snake;
 
+import main.java.ru.game.mouse.Mouse;
 import main.java.ru.game.room.Room;
 
 import java.util.ArrayList;
@@ -55,7 +56,19 @@ public class Snake {
         }
     }
 
-    public void move(int a, int b) {}
+    public void move(int dx, int dy) {
+        SnakeSection head = new SnakeSection(sections.get(0).getX() + dx, sections.get(0).getY() + dy);
+        checkBorders(head);
+        checkBody(head);
+        sections.add(0, head);
+        sections.remove(sections.size()-1);
+        Room game = Room.game;
+        Mouse mouse = game.getMouse();
+        if (mouse.getX() == head.getX() && mouse.getY() == head.getY()) {
+            sections.add(0, head);
+            game.eatMouse();
+        }
+    }
 
     public void checkBorders(SnakeSection head) {
         Room room = Room.game;
